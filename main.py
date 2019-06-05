@@ -55,9 +55,9 @@ def create_production_hex(file_name):
     f.write(":2041A0000000000000000000000000000000000000000000000000000000000000000000FF\n")
     f.write(":2041C0000000000000000000000000000000000000000000000000000000000000000000DF\n")
     f.write(":2041E0000000000000000000000000000000000000000000000000000000000000000000BF\n")
-    f.write(":20420000000000000000000000000000000000000000000000000000000000000000000000\n")
-    f.write(":20422000000000000000000000000000000000000000000000000000000000000000000000\n")
-    f.write(":20424000000000000000000000000000000000000000000000000000000000000000000000\n")
+    f.write(":2042000000000000000000000000000000000000000000000000000000000000000000009E\n")
+    f.write(":2042200000000000000000000000000000000000000000000000000000000000000000007E\n")
+    f.write(":2042400000000000000000000000000000000000000000000000000000000000000000005E\n")
     f.write(":2042600000000000000000000000000000000000000000000000000000000000000000003E\n")
     f.write(":00000001FF\n")
 
@@ -69,6 +69,7 @@ def add_missing_zeros(line):
 
     while len(line) < required_len:
         line += '0'
+
     return line
 
 
@@ -82,7 +83,11 @@ def calculate_hex_checksum(line):
         i += 1
     sum = (sum % 256)
     sum -= 1 << 8
+    print(sum)
     sum = format(abs(sum), 'x').upper()
+    if len(sum) < 2:
+        sum = '0' + sum
+    print(sum)
     return sum
 
 
@@ -94,21 +99,16 @@ if os.path.isfile(file) == 0:
 with open(file) as f:
     file_content = f.readlines()
 
-file_content[16] = ':20420000' + ''.join(map(str, get_computer_name_in_hex()))
-file_content[17] = ':20422000' + ''  # space for custom data, serial number
-file_content[18] = ':20424000' + ''.join(map(str, get_current_time_in_hex()))
+file_content[1] = ':20402000' + ''.join(map(str, get_computer_name_in_hex()))
+file_content[2] = ':20404000' + ''.join(map(str, get_current_time_in_hex()))
 
-file_content[16] = add_missing_zeros(file_content[16])
-file_content[17] = add_missing_zeros(file_content[17])
-file_content[18] = add_missing_zeros(file_content[18])
+file_content[1] = add_missing_zeros(file_content[1])
+file_content[2] = add_missing_zeros(file_content[2])
+file_content[1] += calculate_hex_checksum(file_content[1])
+file_content[2] += calculate_hex_checksum(file_content[2])
 
-file_content[16] += calculate_hex_checksum(file_content[16])
-file_content[17] += calculate_hex_checksum(file_content[17])
-file_content[18] += calculate_hex_checksum(file_content[18])
-
-file_content[16] += '\n'
-file_content[17] += '\n'
-file_content[18] += '\n'
+file_content[1] += '\n'
+file_content[2] += '\n'
 
 with open(file, 'w') as f:
     f.writelines(file_content)
