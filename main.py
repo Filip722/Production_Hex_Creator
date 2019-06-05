@@ -83,11 +83,9 @@ def calculate_hex_checksum(line):
         i += 1
     sum = (sum % 256)
     sum -= 1 << 8
-    print(sum)
     sum = format(abs(sum), 'x').upper()
     if len(sum) < 2:
         sum = '0' + sum
-    print(sum)
     return sum
 
 
