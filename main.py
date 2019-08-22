@@ -16,8 +16,8 @@ def get_current_time_in_hex():
     time_in_hex = []
 
     for i, _ in enumerate(current_time):
-        hex = (hex(ord(current_time[i])))[2:].upper()
-        time_in_hex.append(hex)
+        hex_char = (hex(ord(current_time[i])))[2:].upper()
+        time_in_hex.append(hex_char)
 
     return time_in_hex
 
@@ -27,8 +27,8 @@ def get_computer_name_in_hex():
     computer_name_in_hex = []
 
     for i, _ in enumerate(computer_name):
-        hex = (hex(ord(computer_name[i])))[2:].upper()
-        computer_name_in_hex.append(hex)
+        hex_char = (hex(ord(computer_name[i])))[2:].upper()
+        computer_name_in_hex.append(hex_char)
 
     return computer_name_in_hex
 
@@ -104,16 +104,17 @@ def calculate_hex_checksum(line):
     sum = format(abs(sum), 'x').upper()
     if len(sum) < 2:
         sum = '0' + sum
+
     return sum
 
 
 def main():
-    file = str(sys.argv[1])
+    file_name = str(sys.argv[1])
 
-    if os.path.isfile(file) == 0:
+    if os.path.isfile(file_name) == 0:
         create_production_hex(file)
 
-    with open(file) as file:
+    with open(file_name) as file:
         file_content = file.readlines()
 
     file_content[1] = ':20402000' + \
@@ -126,7 +127,7 @@ def main():
         file_content[i] += calculate_hex_checksum(file_content[i])
         file_content[i] += '\n'
 
-    with open(file, 'w') as file:
+    with open(file_name, 'w') as file:
         file.writelines(file_content)
 
 
