@@ -92,19 +92,16 @@ def add_missing_zeros(line):
 
 def calculate_hex_checksum(line):
     line_to_calculate = line[1:]  # remove ':' from the line
-    temp2 = [line_to_calculate[i:i + 2]
-             for i in range(0, len(line_to_calculate), 2)]
-    sum = 0
-    i = 0
-    for n in temp2:
-        sum += int(temp2[i], 16)
-        i += 1
-    sum = (sum % 256)
-    sum -= 1 << 8
-    sum = format(abs(sum), 'x').upper()
-    if len(sum) < 2:
-        sum = '0' + sum
-    return sum
+    hex_list = []
+
+    for i in range(0, len(line_to_calculate), 2):  # make a list of hex values from string
+        hex_list.append(line_to_calculate[i:i+2])
+
+    checksum = sum(int(hex_value, 16)
+                   for hex_value in hex_list)  # sum list as int
+    checksum = 256 - checksum % 256  # calculate INTEL HEX checksum
+    checksum = hex(checksum)[2:]  # format the output, removing '0x'
+    return checksum
 
 
 def main():
