@@ -2,6 +2,7 @@ import unittest
 import os
 from stm8s_production_hex_creator import *
 
+
 class NamesTestCase(unittest.TestCase):
 
     def test_convert_string_to_hex(self):
