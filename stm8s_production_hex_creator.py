@@ -29,7 +29,7 @@ def make_hex_file(file_name, number_of_bytes):
 
 
 def add_zeros(line):
-    required_len = 73  # number of characters in a line in a hex file
+    required_len = 0  # number of characters in a line in a hex file
 
     while len(line) < required_len:
         line += '0'
