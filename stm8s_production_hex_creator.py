@@ -74,3 +74,4 @@ def create_production_hex_file(file_name, number_of_bytes):
 
 if __name__ == "__main__":
     create_production_hex_file(sys.argv[1], sys.argv[2])
+    
